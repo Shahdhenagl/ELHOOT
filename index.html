@@ -407,6 +407,10 @@
                     <option value="">كل الأنواع</option><option value="إيراد">إيراد</option><option value="مصروف">مصروف</option><option value="تحويل">تحويل</option>
                 </select>
             </div>
+            <div class="period-bar" style="flex-wrap:wrap;">
+                <input type="date" id="filterDate" onchange="renderTransactions()" style="flex:1" title="فلترة بيوم محدد">
+                <button type="button" class="ghost sm" style="width:auto" onclick="clearDayFilter()">🗓 كل الأيام</button>
+            </div>
 
             <div class="tx-list" id="transactionsList"></div>
         </section>
@@ -749,10 +753,14 @@
             draw(expenses, expBox, '−', 'var(--red-2)');
         }
 
+        function clearDayFilter() { $('filterDate').value = ''; renderTransactions(); }
+
         function renderTransactions() {
             const month = $('filterMonth').value, methodId = $('filterMethod').value, type = $('filterType').value;
+            const day = $('filterDate').value; // YYYY-MM-DD ليوم محدد
             let list = transactions.slice().sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-            if (month) list = list.filter(t => { const d = new Date(t.date); return !isNaN(d) && (d.getMonth() + 1) === +month; });
+            if (day) list = list.filter(t => String(t.date).slice(0, 10) === day);
+            else if (month) list = list.filter(t => { const d = new Date(t.date); return !isNaN(d) && (d.getMonth() + 1) === +month; });
             if (methodId) list = list.filter(t => t.methodId === +methodId);
             if (type) list = list.filter(t => t.type === type);
 
