@@ -87,13 +87,15 @@
         /* sync pill */
         .sync-pill {
             display: inline-flex; align-items: center; gap: 6px;
-            font-size: 0.7em; font-weight: 700; padding: 6px 10px;
+            padding: 8px 10px; color: #fff;
             border-radius: 999px; background: rgba(255,255,255,0.12);
             border: 1px solid rgba(255,255,255,0.18); white-space: nowrap;
-            cursor: pointer;
+            cursor: pointer; flex-shrink: 0;
         }
+        .sync-ico { width: 17px; height: 17px; }
+        .sync-pill.saving .sync-ico { animation: spin 0.8s linear infinite; }
         .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
-        .sync-pill.saving .sync-dot { background: var(--amber); animation: pulse 1s infinite; }
+        .sync-pill.saving .sync-dot { background: var(--amber); }
         .sync-pill.offline .sync-dot { background: var(--red); }
         @keyframes pulse { 50% { opacity: 0.3; } }
 
@@ -312,8 +314,9 @@
         <div class="brand-text">
             <h1>حسن الحوت</h1>
         </div>
-        <button class="sync-pill" id="syncPill" onclick="loadData(true)" title="تحديث">
-            <span class="sync-dot"></span><span id="syncText">متصل</span>
+        <button class="sync-pill" id="syncPill" onclick="loadData(true)" title="تحديث" aria-label="تحديث">
+            <span class="sync-dot"></span>
+            <svg class="sync-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
         </button>
       </div>
     </header>
@@ -510,11 +513,11 @@
 
         /* ====================== طبقة البيانات ====================== */
         function setSync(state) {
-            const pill = $('syncPill'), txt = $('syncText');
+            const pill = $('syncPill');
             pill.classList.remove('saving', 'offline');
-            if (state === 'saving') { pill.classList.add('saving'); txt.textContent = 'جاري الحفظ…'; }
-            else if (state === 'offline') { pill.classList.add('offline'); txt.textContent = LOCAL_MODE ? 'وضع محلي' : 'غير متصل'; }
-            else { txt.textContent = 'متصل'; }
+            if (state === 'saving') { pill.classList.add('saving'); pill.title = 'جاري الحفظ…'; }
+            else if (state === 'offline') { pill.classList.add('offline'); pill.title = LOCAL_MODE ? 'وضع محلي' : 'غير متصل — اضغط للتحديث'; }
+            else { pill.title = 'تحديث'; }
         }
 
         function cacheSave() {
