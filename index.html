@@ -7,7 +7,12 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="حسن الحوت">
     <title>حسن الحوت | نظام إدارة المحل</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
     <style>
         :root {
             --brand-cyan: #4db8e8;
@@ -306,7 +311,6 @@
         </svg>
         <div class="brand-text">
             <h1>حسن الحوت</h1>
-            <div class="sub">للآلات الزراعية والمعدات</div>
         </div>
         <button class="sync-pill" id="syncPill" onclick="loadData(true)" title="تحديث">
             <span class="sync-dot"></span><span id="syncText">متصل</span>
@@ -894,6 +898,11 @@
 
         // تحديث تلقائي عند الرجوع للتطبيق (لالتقاط تعديلات الأجهزة الأخرى)
         document.addEventListener('visibilitychange', () => { if (!document.hidden && !LOCAL_MODE) loadData(true); });
+
+        // تسجيل Service Worker (يخلّي التطبيق يتثبّت ويشتغل بدون نت)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+        }
     </script>
 </body>
 </html>
