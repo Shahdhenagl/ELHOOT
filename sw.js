@@ -1,5 +1,5 @@
 /* Service Worker — حسن الحوت PWA */
-const CACHE = 'hoot-v1';
+const CACHE = 'hoot-v2';
 const ASSETS = [
   './',
   './index.html',
